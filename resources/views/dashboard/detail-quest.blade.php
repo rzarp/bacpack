@@ -10,7 +10,9 @@
 
 
 <div class="card mb-3">
-  <img class="img-fluid" src="{{ asset($quest->gambar) }}" data-holder-rendered="true">
+  @if(isset($quest->gambar))
+    <img class="img-fluid" src="{{ asset ((isset($quest->gambar) ? $quest->gambar : '')) }}" data-holder-rendered="true">    
+  @endif
   <div class="card-body">
     <h5 class="card-title">{{ $quest->title }}</h5>
     <p class="card-text">{{ $quest->deskripsi }}</p>

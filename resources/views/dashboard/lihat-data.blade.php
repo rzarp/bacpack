@@ -48,7 +48,15 @@
                  <th scope="row">{{ $loop->iteration }}</th>
                  <td>{{$q->title}} </td>
                  <td> {{$q->deskripsi}}</td>
-                 <td><img width="150px" src="{{ asset($q->gambar) }}"/></td>
+                 <td>
+                    @if(isset($q->gambar))
+                        <img width="150px" src="{{ asset ((isset($q->gambar) ? $q->gambar : '')) }}">
+                    @else
+                        <p>Gambar kosong</p>
+                    @endif
+                 </td>
+               
+                 
                  <td> 
                     <form action="{{ route('data.destroy',['id' => $q->id]) }}" method="post">
                         @method('DELETE')
@@ -83,7 +91,13 @@
                  <th scope="row">{{ $loop->iteration }}</th>
                  <td>{{$b->title}} </td>
                  <td> {{$b->deskripsi}}</td>
-                 <td><img width="150px" src="{{ asset($b->gambar) }}"/></td>
+                 <td>
+                    @if(isset($b->gambar))
+                        <img width="150px" src="{{ asset ((isset($b->gambar) ? $b->gambar : '')) }}">
+                    @else
+                        <p>Gambar kosong</p>
+                    @endif
+                 </td>
                  <td> 
                     <form action="{{ route('blog.destroy',['id' => $b->id]) }}" method="post">
                         @method('DELETE')
@@ -151,7 +165,14 @@
                  <th scope="row">{{ $loop->iteration }}</th>
                  <td>{{$t->title}} </td>
                  <td> {{$t->deskripsi}}</td>
-                 <td><img width="150px" src="{{ asset($t->gambar) }}"/></td>
+                 <td>
+                    @if(isset($t->gambar))
+                    <img width="150px" src="{{ asset ((isset($t->gambar) ? $t->gambar : '')) }}">
+                    @else
+                        <p>Gambar kosong</p>
+                    @endif
+                 </td>
+                   
                  <td> 
                     <form action="{{ route('tour.destroy',['id' => $t->id]) }}" method="post">
                         @method('DELETE')

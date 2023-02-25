@@ -12,6 +12,8 @@ class CreateUsersSeeder extends Seeder
      */
     public function run()
     {
+
+        // php artisan db:seed --class=CreateUsersSeeder
         $user = [
             [
                'name'=>'Admin',

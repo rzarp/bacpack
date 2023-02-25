@@ -19,7 +19,7 @@ class CreateBlogsTable extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('deskripsi');
-            $table->text('gambar');
+            $table->text('gambar')->nullable();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

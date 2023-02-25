@@ -25,16 +25,31 @@
         <div class="form-group">
             <label>Judul</label>
             <input type="text" name="title" class="form-control form-control-sm">
+            @error('title')
+                <div class="text-danger">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
         <div class="form-group">
             <label>Deskripsi</label>
             <textarea class="form-control" name="deskripsi"></textarea>
+            @error('deskripsi')
+                <div class="text-danger">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
         <div class="form-group">
             <form>
             <div class="form-group">
                 <label for="exampleFormControlFile1">Input Gambar</label>
-                <input type="file" name="gambar" class="form-control-file" id="exampleFormControlFile1" required>
+                <input type="file" name="gambar" class="form-control-file" id="exampleFormControlFile1">
+                @error('gambar')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                @enderror
             </div>
             </form>
             <div class="form-text text-muted">The image must have a maximum size of 1MB</div>

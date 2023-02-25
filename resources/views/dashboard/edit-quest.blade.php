@@ -46,7 +46,7 @@
                         <form>
                           <div class="form-group">
                             <label for="exampleFormControlFile1">Input Gambar</label>
-                            <input type="file" name="gambar" class="form-control-file" id="exampleFormControlFile1"  value="{{ $quest->gambar }}" required>
+                            <input type="file" name="gambar" class="form-control-file" id="exampleFormControlFile1">
                           </div>
                         </form>
                         <div class="form-text text-muted">The image must have a maximum size of 1MB</div>

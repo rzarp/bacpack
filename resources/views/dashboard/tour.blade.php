@@ -46,13 +46,17 @@
     </div>
     </div>
     <div class="card-body">
-    <div class="chocolat-parent">
-        <a href="{{ asset($t->gambar) }}" class="chocolat-image" title="Just an example">
-        <div data-crop-image="285" style="overflow: hidden; position: relative; height: 285px;">
-            <img alt="image" src="{{ asset($t->gambar) }}" class="img-fluid">
+        <div class="chocolat-parent">
+            @if(isset($t->gambar))
+                <a href="{{ asset ((isset($t->gambar) ? $t->gambar : '')) }}" class="chocolat-image" title="Just an example">
+                    <div data-crop-image="285" style="overflow: hidden; position: relative; height: 285px;">
+                        <img alt="image" src="{{ asset ((isset($t->gambar) ? $t->gambar : '')) }}" class="img-fluid">
+                    </div>
+                </a>
+            @else
+                <p>{{$t->deskripsi}}</p>
+            @endif
         </div>
-        </a>
-    </div>
     <hr>
     
     <a href="{{ url('galeri/' . $t->slug) }}" class="btn btn-icon icon-left"><i class="fa fa-eye"></i> Lihat</a>

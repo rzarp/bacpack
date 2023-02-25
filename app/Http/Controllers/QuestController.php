@@ -44,25 +44,30 @@ class QuestController extends Controller
             'deskripsi' => ' ',
         ]);
         
+
+        $path = null;
         if($request->hasFile('gambar')) {
             $extFile = $request->gambar->getClientOriginalExtension();
             $namaFile = 'gambar-'.time().".".$extFile;
             $path = $request->gambar->move('img/quest', $namaFile);
-            DB::table('quests')
-                ->insert([
-                    'title'             => $request->title,
-                    'gambar'            => $path,
-                    'deskripsi'         => $request->deskripsi,
-                    'slug'              => Str::slug($request->title),
-                    'user_id'           => auth()->id(),
-                ]);
-                
-                return redirect(route('input.quest'))->with('pesan','Data Berhasil ditambahkan');
+           
         }
+
+        DB::table('quests')
+        ->insert([
+            'title'             => $request->title,
+            'gambar'            => $path,
+            'deskripsi'         => $request->deskripsi,
+            'slug'              => Str::slug($request->title),
+            'user_id'           => auth()->id(),
+        ]);
+        
+        return redirect(route('input.quest'))->with('pesan','Data Berhasil ditambahkan');
     }
 
     public function detail_quest($slug) {
         // $data['quest'] = DB::select('select * from quests where slug = ?', [$slug]);
+        $quest = Quest::where('slug',$slug)->get();
         $quest = Quest::with(['comments', 'comments.child'])->where('slug', $slug)->first();
         return view('dashboard.detail-quest',compact('quest'));
     }
@@ -102,22 +107,39 @@ class QuestController extends Controller
 
     public function update_quest(Request $request, $id) 
     {
+
+        // dd($request);
+        $quest = Quest::find($id);
+        $request->validate ([
+            'title'             => 'required',
+            'deskripsi'         => 'required',
+         ]);
+
+        $quest = Quest::find($id);
+        if (isset($request->gambar)) {
+            $request->validate ([
+            'gambar'  => 'nullable',
+        ]);
+
         if($request->hasFile('gambar')) {
             $extFile = $request->gambar->getClientOriginalExtension();
             $namaFile = 'gambar-'.time().".".$extFile;
-            $path = $request->gambar->move('img/quest', $namaFile);
-            DB::table('quests')
-            ->where('id', $id)
-            ->update([
-                'title'             => $request->title,
-                'gambar'            => $path,
-                'deskripsi'         => $request->deskripsi,
-                'slug'              => Str::slug($request->title),
-                
-            ]);
-
-        return redirect(route('data.detail'))->with('pesan','Data Berhasil diupdate');
+            $gambar = $request->gambar->move('img/quest', $namaFile);
         }
+    }
+
+    
+        DB::table('quests')
+        ->where('id', $id)
+        ->update([
+            'title'       => $request->title,
+            'deskripsi'   => $request->deskripsi,
+            'slug'        => Str::slug($request->title),
+            'gambar'      => (isset($gambar) ? $gambar : $quest->gambar),
+            
+        ]);
+
+        return redirect(route('data.detail',$id))->with('pesan','Data Berhasil diupdate');
     }
     
 
@@ -143,22 +165,38 @@ class QuestController extends Controller
 
     public function update_blog(Request $request, $id) 
     {
+
+        $blog = Blog::find($id);
+        $request->validate ([
+            'title'             => 'required',
+            'deskripsi'         => 'required',
+         ]);
+
+        $blog = Blog::find($id);
+        if (isset($request->gambar)) {
+            $request->validate ([
+            'gambar'  => 'nullable',
+        ]);
+
         if($request->hasFile('gambar')) {
             $extFile = $request->gambar->getClientOriginalExtension();
             $namaFile = 'gambar-'.time().".".$extFile;
-            $path = $request->gambar->move('img/blog', $namaFile);
-            DB::table('blogs')
-            ->where('id', $id)
-            ->update([
-                'title'             => $request->title,
-                'gambar'            => $path,
-                'deskripsi'         => $request->deskripsi,
-                'slug'              => Str::slug($request->title),
-                
-            ]);
-
-        return redirect(route('data.detail'))->with('pesan','Data Berhasil diupdate');
+            $gambar = $request->gambar->move('img/blog', $namaFile);
         }
+    }
+
+    
+        DB::table('blogs')
+        ->where('id', $id)
+        ->update([
+            'title'       => $request->title,
+            'deskripsi'   => $request->deskripsi,
+            'slug'        => Str::slug($request->title),
+            'gambar'      => (isset($gambar) ? $gambar : $quest->gambar),
+            
+        ]);
+
+        return redirect(route('data.detail',$id))->with('pesan','Data Berhasil diupdate');
     }
     
 
@@ -320,27 +358,32 @@ class QuestController extends Controller
 
     public function storeblog(Request $request)
     {
+
+        // dd($request);
         $request->validate ([
             'title'     => 'required',
             'gambar'    => 'max:1000|file|image',
-            'deskripsi' => ' ',
+            'deskripsi' => '',
         ]);
+
+        $gambar = null;
         
         if($request->hasFile('gambar')) {
             $extFile = $request->gambar->getClientOriginalExtension();
             $namaFile = 'gambar-'.time().".".$extFile;
-            $path = $request->gambar->move('img/blog', $namaFile);
-            DB::table('blogs')
-                ->insert([
-                    'title'             => $request->title,
-                    'gambar'            => $path,
-                    'deskripsi'         => $request->deskripsi,
-                    'slug'              => Str::slug($request->title),
-                    'user_id'           => auth()->id(),
-                ]);
-                
-                return redirect(route('input.blog'))->with('pesan','Data Berhasil ditambahkan');
+            $gambar = $request->gambar->move('img/blog', $namaFile);
+            
         }
+
+        DB::table('blogs')
+            ->insert([
+                'title'             => $request->title,
+                'gambar'            => $gambar,
+                'deskripsi'         => $request->deskripsi,
+                'slug'              => Str::slug($request->title),
+                'user_id'           => auth()->id(),
+            ]);
+        return redirect(route('input.blog'))->with('pesan','Data Berhasil ditambahkan');
     }
 
     public function detail_blog($slug) 
@@ -450,21 +493,25 @@ class QuestController extends Controller
             'deskripsi' => ' ',
         ]);
         
+
+        $gambar = null;
         if($request->hasFile('gambar')) {
             $extFile = $request->gambar->getClientOriginalExtension();
             $namaFile = 'gambar-'.time().".".$extFile;
-            $path = $request->gambar->move('img/tour', $namaFile);
-            DB::table('tours')
-                ->insert([
-                    'title'             => $request->title,
-                    'gambar'            => $path,
-                    'deskripsi'         => $request->deskripsi,
-                    'slug'              => Str::slug($request->title),
-                    'user_id'           => auth()->id(),
-                ]);
-                
-                return redirect(route('input.tour'))->with('pesan','Data Berhasil ditambahkan');
+            $gambar = $request->gambar->move('img/tour', $namaFile);
+           
         }
+
+        DB::table('tours')
+        ->insert([
+            'title'             => $request->title,
+            'gambar'            => $gambar,
+            'deskripsi'         => $request->deskripsi,
+            'slug'              => Str::slug($request->title),
+            'user_id'           => auth()->id(),
+        ]);
+        
+        return redirect(route('input.quest'))->with('pesan','Data Berhasil ditambahkan');
     }
 
      public function detail_tour($slug) 

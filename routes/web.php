@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,13 +17,36 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('admin/home', 'HomeController@adminHome')->name('admin.home')->middleware('is_admin');
-
 Route::get('/', function () {
     return view('dashboard.dashboard');
 });
+Route::get('/home', 'HomeController@index')->name('home');
+
+
+// admin
+Route::get('admin/home', 'HomeController@adminHome')->name('admin.home')->middleware('is_admin');
+
+Route::get('/admin/user', 'UserController@index')->name('user');
+Route::get('/show-user', 'UserController@show')->name('show-datauser');
+Route::get('/input-user', 'UserController@create')->name('input-user');
+Route::post('/user/tambah','UserController@store')->name('user.store');
+
+Route::prefix('v1/qa')->group(function () {
+    Route::get('/qa', [UserController::class, 'index_qa'])->name('v1.qa.qa.index_quest');
+    Route::get('/qa/show', [UserController::class, 'show_qa'])->name('v1.qa.qa.show');
+    Route::get('/qa/{id}', [UserController::class, 'destroy_qa'])->name('v1.qa.qa.destroy_qa');
+});
+
+Route::prefix('v1/ga')->group(function () {
+    Route::get('/ga', [UserController::class, 'index_ga'])->name('v1.ga.ga.index_ga');
+    Route::get('/show_ga', [UserController::class, 'show_ga'])->name('v1.ga.show_ga');
+    Route::get('/ga/{id}', [UserController::class, 'destroy_ga'])->name('v1.ga.ga.destroy_ga');
+});
+
+
+
+
+
 // data thread (quest)
 Route::get('/data', 'QuestController@data')->name('data.detail');
 Route::get('/data/edit/{id}','QuestController@edit_quest')->name('data.edit');
@@ -42,7 +66,9 @@ Route::put('/tour/edit/{id}','QuestController@update_tour')->name('tour.update')
 Route::delete('/tour/hapus/{id}','QuestController@destroy_tour')->name('tour.destroy');
 
 // Tanya dan jawab
-Route::get('/{slug}','QuestController@detail_quest');
+
+
+Route::get('/quest/{slug}','QuestController@detail_quest');
 Route::get('/input/tanya','QuestController@index')->name('input.tanya');
 Route::get('/input/quest','QuestController@inputquest')->name('input.quest');
 Route::post('/quest/tambah','QuestController@storequest')->name('quest.store');
@@ -74,6 +100,11 @@ Route::post('/commenttour', 'QuestController@comment_tour');
 Route::put('/user/updatesetting/{id}','QuestController@update_setting')->name('update.setting');
 Route::get('/user/setting','QuestController@setting')->name('setting.user');
 Route::get('/user/updatesetting/{id}','QuestController@edit_setting')->name('edit.setting');
+
+
+
+
+
 
 
 

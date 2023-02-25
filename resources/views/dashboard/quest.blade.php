@@ -40,7 +40,7 @@
 <div class="col-md-7">
 <div class="card">
     <div class="card-header">
-    <h4><a href="{{ url('/' . $q->slug) }}">{{$q->title}}</a></h4>
+    <h4><a href="{{ url('quest/' . $q->slug) }}">{{$q->title}}</a></h4>
     <div class="card-header-action">
         Pada {{ Carbon::now()->isoFormat('dddd, D MMMM Y')}}
     </div>
@@ -48,11 +48,15 @@
     <div class="card-body">
     {{-- <div class="mb-2 text-muted">{{$q->deskripsi}}</div> --}}
     <div class="chocolat-parent">
-        <a href="{{ asset($q->gambar) }}" class="chocolat-image" title="Just an example">
-        <div data-crop-image="285" style="overflow: hidden; position: relative; height: 285px;">
-            <img alt="image" src="{{ asset($q->gambar) }}" class="img-fluid">
-        </div>
-        </a>
+        @if(isset($q->gambar))
+            <a href="{{ asset ((isset($q->gambar) ? $q->gambar : '')) }}" class="chocolat-image" title="Just an example">
+                <div data-crop-image="285" style="overflow: hidden; position: relative; height: 285px;">
+                    <img alt="image" src="{{ asset ((isset($q->gambar) ? $q->gambar : '')) }}" class="img-fluid">
+                </div>
+            </a>
+        @else
+            <p>{{$q->deskripsi}}</p>
+        @endif
     </div>
     <hr>
     
